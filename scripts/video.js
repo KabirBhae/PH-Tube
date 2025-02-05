@@ -77,9 +77,10 @@ const displayVideos = (videos) => {
 				<div>
 					<h2 class="font-bold">${videoItem.title}</h2>
 					<div class="flex items-center gap-2">
-						<p class="text-gray-400">${videoItem.authors[0].profile_name}</p>
+						<p class="text-gray-600">${videoItem.authors[0].profile_name}</p>
 						${videoItem.authors[0].verified === true ? `<img class="w-5" src="https://img.icons8.com/color/48/verified-badge.png"/>` : ""}
 					</div>
+					<p class="text-gray-400">${videoItem.others.views} Views</p>
 					<button class="btn btn-sm btn-error" onclick="loadDetails('${videoItem.video_id}')">Details</button>
 				</div>
 			</div>`
@@ -126,9 +127,24 @@ const removeActiveButtons = () =>{
 	}
 }
 
+const sortVideos = async ()=>{
+		const res = await fetch("https://openapi.programming-hero.com/api/phero-tube/videos?title=")
+		const data = await res.json()
+		const videos = data.videos
+
+		videos.sort((a, b) => parseViews(b.others.views) - parseViews(a.others.views))
+		displayVideos(videos)
+
+}
+const parseViews = (views) => {
+	if (views.endsWith("k")) {
+		views = views.slice(0, -1)
+	}
+	return parseFloat(views)
+}
 document.getElementById("searchVideoBox").addEventListener("keyup", (e)=>{
 	loadVideos(e.target.value)
 })
 
 loadCategories()
-loadVideos()
+loadVideos("")
