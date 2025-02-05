@@ -14,17 +14,20 @@ const loadVideos = () => {
 const loadCategoricalVideos = (id) => {
 	fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
 		.then((res) => res.json())
-		.then((data) => displayVideos(data.category))
+		.then((data) => {
+			removeActiveButtons()
+			document.getElementById(`category-button-${id}`).classList.add("active-button")
+			displayVideos(data.category)
+		})
 		.catch((err) => console.log(err))
 }
 
 const displayCategories = (categories) => {
 	categoryContainer = document.getElementById("categories-container")
-	console.log(categories)
 	categories.forEach((categoryItem) => {
 		const buttonContainer = document.createElement("div")
 		buttonContainer.innerHTML = `
-		<button onclick="loadCategoricalVideos(${categoryItem.category_id})" class="btn">
+		<button id="category-button-${categoryItem.category_id}" onclick="loadCategoricalVideos(${categoryItem.category_id})" class="btn category-button">
 			${categoryItem.category}
 		</button>`
 		categoryContainer.appendChild(buttonContainer)
@@ -100,6 +103,12 @@ const convertSeconds = (seconds) => {
     if (hours > 1) return `${hours} hrs ${minutes} min ago`;
     return `${minutes} min ago`;
 }
+const removeActiveButtons = () =>{
+	categoryButtons = document.getElementsByClassName("category-button")
 
+	for (const categoryButtonsItem of categoryButtons) {
+		categoryButtonsItem.classList.remove("active-button")
+	}
+}
 loadCategories()
 loadVideos()
