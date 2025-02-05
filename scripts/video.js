@@ -8,7 +8,10 @@ const loadCategories = () => {
 const loadVideos = (searchText = "") => {
 	fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
 		.then((res) => res.json())
-		.then((data) => displayVideos(data.videos))
+		.then((data) => {
+			removeActiveButtons()
+			document.getElementById(`category-button-all`).classList.add("active-button")
+			displayVideos(data.videos)})
 		.catch((err) => console.log(err))
 }
 const loadCategoricalVideos = (id) => {
@@ -29,6 +32,14 @@ const loadDetails = async (videoID) =>{
 
 const displayCategories = (categories) => {
 	categoryContainer = document.getElementById("categories-container")
+
+	showAllButtonContainer = document.createElement("div")
+	showAllButtonContainer.innerHTML = `
+		<button id="category-button-all" onclick="loadVideos()" class="btn category-button active-button">
+				All Videos
+		</button>`
+	categoryContainer.appendChild(showAllButtonContainer)
+
 	categories.forEach((categoryItem) => {
 		const buttonContainer = document.createElement("div")
 		buttonContainer.innerHTML = `
@@ -144,7 +155,8 @@ const sortVideos = async ()=>{
 }
 const findActiveCategory = () =>{
 	const activeCategory = document.getElementsByClassName("active-button")
-	if (activeCategory.length) return activeCategory[0].id.slice(16)
+	if (activeCategory[0].id.slice(16) === "all") return
+	return activeCategory[0].id.slice(16)
 }
 const parseViews = (views) => {
 	if (views.endsWith("k")) {
