@@ -34,10 +34,19 @@ const displayVideos = (videos) => {
 	videoContainer = document.getElementById("videos-container")
 	videoContainer.innerHTML=""
 
-	if(videos.length ===0){
-	videoContainer.innerHTML = "SORRY! NO CONTENT FOUND"
+	if(videos.length === 0){
+	videoContainer.classList.remove("grid")
+	videoContainer.innerHTML = `
+		<div class="min-h-[500px] flex flex-col justify-center items-center">
+			<img class="mb-5" src="assets/Icon.png"
+			<h2 class="text-center text-xl font-bold">
+				Sorry! No content available in this category.
+			</h2>
+		</div>
+	`
 	}
 	else{
+		videoContainer.classList.add("grid")
 		videos.forEach((videoItem) => {
 			const card = document.createElement("div")
 			card.classList = "card card-compact"
