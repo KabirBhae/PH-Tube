@@ -11,51 +11,65 @@ const loadVideos = () => {
 		.then((data) => displayVideos(data.videos))
 		.catch((err) => console.log(err))
 }
+const loadCategoricalVideos = (id) => {
+	fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+		.then((res) => res.json())
+		.then((data) => displayVideos(data.category))
+		.catch((err) => console.log(err))
+}
 
-const displayCategories = (data) => {
+const displayCategories = (categories) => {
 	categoryContainer = document.getElementById("categories-container")
-	data.forEach((element) => {
-		const button = document.createElement("button")
-		button.classList = "btn"
-		button.innerText = element.category
-		categoryContainer.appendChild(button)
+	console.log(categories)
+	categories.forEach((categoryItem) => {
+		const buttonContainer = document.createElement("div")
+		buttonContainer.innerHTML = `
+		<button onclick="loadCategoricalVideos(${categoryItem.category_id})" class="btn">
+			${categoryItem.category}
+		</button>`
+		categoryContainer.appendChild(buttonContainer)
 	})
 }
-const displayVideos = (data) => {
+const displayVideos = (videos) => {
 	videoContainer = document.getElementById("videos-container")
-	data.forEach((element) => {
-		console.log(element)
-		const card = document.createElement("div")
-		card.classList = "card card-compact"
-		card.innerHTML = `
+	videoContainer.innerHTML=""
+
+	if(videos.length ===0){
+	videoContainer.innerHTML = "SORRY! NO CONTENT FOUND"
+	}
+	else{
+		videos.forEach((videoItem) => {
+			const card = document.createElement("div")
+			card.classList = "card card-compact"
+			card.innerHTML = `
 			<figure class="h-[200px] relative">
 				<img class="h-full w-full object-cover"
-				src=${element.thumbnail}
+				src=${videoItem.thumbnail}
 				alt="Thumbnail"/>
 				${
-					element.others.posted_date
+					videoItem.others.posted_date
 						? `<span class="absolute bottom-2 right-2 bg-black text-white rounded p-1">
-					${convertSeconds(element.others.posted_date)}</span>`
+					${convertSeconds(videoItem.others.posted_date)}</span>`
 						: ""
 				}
 			</figure>
 			<div class="px-0 py-2 flex gap-2">
 				<div>
-					<img class="w-10 h-10 rounded-full object-cover" src=${element.authors[0].profile_picture} />
+					<img class="w-10 h-10 rounded-full object-cover" src=${videoItem.authors[0].profile_picture} />
 				</div>
 				<div>
-					<h2 class="font-bold">${element.title}</h2>
+					<h2 class="font-bold">${videoItem.title}</h2>
 					<div class="flex items-center gap-2">
-						<p class="text-gray-400">${element.authors[0].profile_name}</p>
-						${element.authors[0].verified === true ? `<img class="w-5" src="https://img.icons8.com/color/48/verified-badge.png"/>` : ""}
+						<p class="text-gray-400">${videoItem.authors[0].profile_name}</p>
+						${videoItem.authors[0].verified === true ? `<img class="w-5" src="https://img.icons8.com/color/48/verified-badge.png"/>` : ""}
 					</div>
 				</div>
 			</div>`
-		videoContainer.appendChild(card)
-	})
+			videoContainer.appendChild(card)
+		})
+	}
 }
 const convertSeconds = (seconds) => {
-	//16278
     let minutes = Math.floor(seconds / 60);
     let hours = Math.floor(minutes / 60);
     let days = Math.floor(hours / 24);
@@ -77,11 +91,6 @@ const convertSeconds = (seconds) => {
     if (hours > 1) return `${hours} hrs ${minutes} min ago`;
     return `${minutes} min ago`;
 }
-// const convertSeconds = (seconds) => {
-//     let minutes = Math.floor(seconds / 60);
-//     let hours = Math.floor(minutes / 60);
-//     minutes = minutes % 60;
-//     return `${hours}hrs ${minutes} min ago`;
-// };
+
 loadCategories()
 loadVideos()
