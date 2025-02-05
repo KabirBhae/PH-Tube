@@ -21,6 +21,11 @@ const loadCategoricalVideos = (id) => {
 		})
 		.catch((err) => console.log(err))
 }
+const loadDetails = async (videoID) =>{
+	const res = await fetch(`https://openapi.programming-hero.com/api/phero-tube/video/${videoID}`)
+	const data = await res.json()
+	displayDetails(data.video)
+}
 
 const displayCategories = (categories) => {
 	categoryContainer = document.getElementById("categories-container")
@@ -75,11 +80,21 @@ const displayVideos = (videos) => {
 						<p class="text-gray-400">${videoItem.authors[0].profile_name}</p>
 						${videoItem.authors[0].verified === true ? `<img class="w-5" src="https://img.icons8.com/color/48/verified-badge.png"/>` : ""}
 					</div>
+					<button class="btn btn-sm btn-error" onclick="loadDetails('${videoItem.video_id}')">Details</button>
 				</div>
 			</div>`
 			videoContainer.appendChild(card)
 		})
 	}
+}
+const displayDetails = (video) =>{
+	console.log(video)
+	const modalContent = document.getElementById("modal-content")
+	modalContent.innerHTML = `
+	<img src="${video.thumbnail}"/>
+	<p>${video.description} </p>`
+
+	document.getElementById("detailsModal").showModal()
 }
 const convertSeconds = (seconds) => {
     let minutes = Math.floor(seconds / 60);

@@ -31,6 +31,17 @@
 		<main>
 			<div id="videos-container" class="w-11/12 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 py-10"></div>
 		</main>
+		<!-- Open the modal using ID.showModal() method -->
+		<button class="btn hidden" onclick="detailsModal.showModal()">open modal</button>
+		<dialog id="detailsModal" class="modal">
+		<div class="modal-box">
+			<div id="modal-content">
+			</div>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+		</dialog>
 		<script src="scripts/video.js"></script>
 	</body>
 </html>
