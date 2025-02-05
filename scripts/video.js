@@ -92,7 +92,7 @@ const displayVideos = (videos) => {
 						${videoItem.authors[0].verified === true ? `<img class="w-5" src="https://img.icons8.com/color/48/verified-badge.png"/>` : ""}
 					</div>
 					<p class="text-gray-400">${videoItem.others.views} Views</p>
-					<button class="btn btn-sm btn-error" onclick="loadDetails('${videoItem.video_id}')">Details</button>
+					<button class="btn btn-sm btn-outline mt-1" onclick="loadDetails('${videoItem.video_id}')">Show Details</button>
 				</div>
 			</div>`
 			videoContainer.appendChild(card)
@@ -104,7 +104,7 @@ const displayDetails = (video) =>{
 	const modalContent = document.getElementById("modal-content")
 	modalContent.innerHTML = `
 	<img src="${video.thumbnail}"/>
-	<p>${video.description} </p>`
+	<p class="mt-4">${video.description} </p>`
 
 	document.getElementById("detailsModal").showModal()
 }
