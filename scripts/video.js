@@ -24,11 +24,6 @@ const loadCategoricalVideos = (id) => {
 		})
 		.catch((err) => console.log(err))
 }
-const loadDetails = async (videoID) =>{
-	const res = await fetch(`https://openapi.programming-hero.com/api/phero-tube/video/${videoID}`)
-	const data = await res.json()
-	displayDetails(data.video)
-}
 
 const displayCategories = (categories) => {
 	categoryContainer = document.getElementById("categories-container")
@@ -98,15 +93,6 @@ const displayVideos = (videos) => {
 			videoContainer.appendChild(card)
 		})
 	}
-}
-const displayDetails = (video) =>{
-	console.log(video)
-	const modalContent = document.getElementById("modal-content")
-	modalContent.innerHTML = `
-	<img src="${video.thumbnail}"/>
-	<p class="mt-4">${video.description} </p>`
-
-	document.getElementById("detailsModal").showModal()
 }
 const convertSeconds = (seconds) => {
     let minutes = Math.floor(seconds / 60);
